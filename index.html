@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Reminders</title>
-    <script defer src="script.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Reminders</title>
+  <script defer src="./script.js"></script>
 </head>
 <body>
-<input id="minutes" type="number">
-<label for="minutes">minutes</label>
-<input id="seconds" type="number">
-<label for="seconds">seconds</label>
-<input id="millis" type="number" style="display: none">
-
-<br/>
-<label for="recurring">recurring?</label>
-<input id="recurring" type="checkbox" checked>
-
-<button id="reminderButton" type="button">start</button>
+  <h2>Reminders</h2>
+  <label>
+    <input id="notifyCheckbox" type="checkbox">allow notifications
+  </label>
+  <p><time id="date">&lt;current date&gt;</time></p>
+  <p><time id="time">&lt;current time&gt;</time></p>
+  <section id="upcoming">
+  </section>
+  <hr>
+  <form>
+    <p>
+      <label>new reminder:
+      <input type="text" placeholder="reminder" title="the text of your reminder">
+      </label>
+    </p>
+    <p>
+      <label>at: <input type="time" placeholder="time"></label>
+    </p>
+    <p>
+      <label><input name="recurringCheckbox" type="checkbox"> recurring</label>
+      every <input name="recurringValue" type="number">
+      <select name="recurringUnits">
+        <option value="minutes">minutes</option>
+        <option value="hours">hours</option>
+      </select>
+    </p>
+    <p>
+      <button type="button">add reminder</button>
+    </p>
+  </form>
 </body>
 </html>

@@ -1,37 +1,35 @@
-let minutes = document.querySelector('#minutes');
-let seconds = document.querySelector('#seconds');
-let millis = document.querySelector('#millis');
-minutes.value = 10;
+// local settings: notify permission, reminders
 
-let frameId = 0;
-let endTime;
+const notify = document.querySelector(`#notifyCheckbox`);
+notify.checked = (Notification.permission === `granted`);
 
-function render(timestamp) {
-    "use strict";
-    let timeLeft = endTime - Date.now();
-    minutes.value = Math.floor(timeLeft / 60000);
-    let millisLeft = timeLeft % 60000;
-    seconds.value = Math.floor(millisLeft / 1000);
-    millis.value = millisLeft % 1000;
-    frameId = requestAnimationFrame(render);
+notify.addEventListener(`input`, (event) => {
+    if (notify.checked) {
+      // only set checked if permission is granted
+      notify.checked = false;
+      Notification.requestPermission()
+        .then((result) => {
+          notify.checked = (result === `granted`);
+        });
+    }
+});
+
+const date = document.querySelector(`#date`);
+const time = document.querySelector(`#time`);
+
+function tick() {
+  const now = new Date();
+  date.datetime = now.toISOString();
+  date.textContent = now.toDateString();
+  time.textContent = now.toLocaleTimeString();
+  time.datetime = now.toISOString();
 }
-function activate() {
-    frameId = requestAnimationFrame(render);
-    let minutesVal = parseInt(minutes.value, 10) || 0;
-    let secondsVal = parseInt(seconds.value, 10) || 0;
-    let millisVal = parseInt(millis.value, 10) || 0;
-    console.log("started", minutesVal, secondsVal, millisVal);
-    endTime = Date.now() + (minutesVal*60000 + secondsVal*1000 + millisVal);
-    reminderButton.innerText = 'pause';
+setInterval(tick, 1000);
+
+class Reminder {
+  constructor (text, time, recurring) {
+    this.text = text;
+    this.time = time;
+    this.recurring = recurring;
+  }
 }
-function deactivate() {
-    console.log("paused", minutes.value, seconds.value, millis.value);
-    cancelAnimationFrame(frameId);
-    frameId = 0;
-    reminderButton.innerText = 'start';
-}
-function toggleActive() {
-    frameId ? deactivate() : activate();
-}
-let reminderButton = document.querySelector('#reminderButton');
-reminderButton.addEventListener('click', toggleActive);
